@@ -29,7 +29,7 @@ class Car(models.Model):
 class Driver(models.Model):
     name = models.CharField(max_length=100)
     phone = models.CharField(max_length=15)
-    car = models.OneToOneField(Car, on_delete=models.CASCADE)  # Har bir haydovchida bitta mashina
+    car = models.OneToOneField(Car, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"{self.name} ({self.car})"
@@ -37,7 +37,7 @@ class Driver(models.Model):
 
 class Contract(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    driver = models.ForeignKey(Driver, on_delete=models.SET_NULL, null=True)
+    driver = models.ForeignKey(Driver, on_delete=models.CASCADE)
     from_address = models.CharField(max_length=255)
     to_address = models.CharField(max_length=255)
     distance_km = models.FloatField()
@@ -46,7 +46,7 @@ class Contract(models.Model):
     completed = models.BooleanField(default=False)
 
     def calculate_price(self):
-        return round(self.distance_km * 5000, 2)  # 1 km = 5000 so‘m
+        return round(self.distance_km * 5000, 2)
 
     def __str__(self):
         return f"{self.user.name} → {self.to_address}"

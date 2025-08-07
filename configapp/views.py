@@ -20,7 +20,7 @@ def create_contract(request):
             contract = form.save(commit=False)
             contract.price = contract.calculate_price()
             contract.save()
-            return redirect('contract_detail', pk=contract.pk)
+            return redirect('dashboard')
     else:
         form = ContractForm()
     return render(request, 'create_contract.html', {'form': form})
@@ -41,7 +41,7 @@ def add_driver(request):
         form = DriverForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('drivers_list')
+            return redirect('dashboard')
     else:
         form = DriverForm()
     return render(request, 'add_driver.html', {'form': form})
@@ -57,7 +57,7 @@ def add_user(request):
         form = UserForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('users_list')
+            return redirect('dashboard')
     else:
         form = UserForm()
     return render(request, 'add_user.html', {'form': form})
@@ -71,7 +71,7 @@ def add_car(request):
         form = CarForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('cars_list')
+            return redirect('dashboard')
     else:
         form = CarForm()
     return render(request, 'add_car.html', {'form': form})
@@ -80,4 +80,13 @@ def contracts_list(request):
     contracts = Contract.objects.all()
     return render(request, 'contracts_list.html', {'contracts': contracts})
 
-
+def update_drivers(request,pk):
+    drivers = get_object_or_404(Driver,id=pk)
+    if request.method == "POST":
+        form = DriverForm(request.POST,instance=drivers)
+        if form.is_valid():
+            form.save()
+            return redirect('dashboard')
+    else:
+        form = DriverForm(instance=drivers)
+    return render(request,'update_drivers.html',{'form':form,'drivers':drivers})
